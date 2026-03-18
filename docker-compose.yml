@@ -1,0 +1,9 @@
+services:
+  whatsapp-flows:
+    build: .
+    container_name: whatsapp-flows
+    ports:
+      - "3005:3005"
+    env_file:
+      - .env
+    restart: unless-stopped
