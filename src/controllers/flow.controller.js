@@ -21,8 +21,21 @@ export function createFlowController({ privateKey }) {
 
     handleFlowWebhook: async (req, res) => {
       try {
+        console.log('[FLOW ENDPOINT HIT]', {
+          method: req.method,
+          url: req.originalUrl || req.url,
+          headers: req.headers,
+          time: new Date().toISOString()
+        });
         const { decryptedBody, aesKeyBuffer, initialVectorBuffer } = decryptRequest(req.body, privateKey);
+
+        try {
+          console.log('[FLOW DECRYPTED BODY]', JSON.stringify(decryptedBody, null, 2));
+        } catch (_e) {
+          console.log('[FLOW DECRYPTED BODY]', decryptedBody);
+        }
         const { action, version, screen, data } = decryptedBody;
+        console.log('[FLOW ACTION]', { action, version, screen });
         const normalizedData = extractFlowData(data);
 
         if (action === 'ping') {
